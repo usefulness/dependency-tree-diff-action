@@ -1,0 +1,9 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+plugins {
+    id("com.starter.library.kotlin") version "0.18.0"
+}

@@ -2,6 +2,7 @@
 
 wget "https://github.com/JakeWharton/dependency-tree-diff/releases/download/1.1.0/dependency-tree-diff.jar" -q -O dependency-tree-diff.jar
 
+cd "$INPUT_BUILD_ROOT_DIR"
 ./gradlew project
 ./gradlew :"$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >new_diff.txt
 git checkout "$INPUT_BASEREF"
