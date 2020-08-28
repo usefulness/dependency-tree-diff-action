@@ -32,7 +32,7 @@ jobs:
       uses: burrunan/gradle-cache-action@v1
     - id: dependency-diff
       name: Generate dependency diff
-      uses: usefulness/dependency-tree-diff-action@master
+      uses: usefulness/dependency-tree-diff-action@v1
     - uses: peter-evans/find-comment@v1
       id: find_comment
       with:
