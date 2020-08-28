@@ -2,7 +2,7 @@ name: 'Dependency tree diff for Gradle'
 description: "Dependency tree diff generates human readable dependency diff between 2 commits, using Jake Wharton's dependency-tree-diff tool"
 inputs:
   configuration:
-    description: 'Selected configuration'
+    description: 'Selected Gradle configuration, passed to `./gradlew dependencies --configuration xxx`. Should correspond to output artifact that is considered output of the project'
     required: false
     default: 'releaseRuntimeClasspath'
   project:
