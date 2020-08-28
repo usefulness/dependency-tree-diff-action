@@ -1,7 +1,6 @@
 #!/bin/bash -el
 
 wget "https://github.com/JakeWharton/dependency-tree-diff/releases/download/1.1.0/dependency-tree-diff.jar" -q -O dependency-tree-diff.jar
-ls -l
 
 cd app
 git checkout "$INPUT_BASEREF"
