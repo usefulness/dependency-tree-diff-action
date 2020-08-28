@@ -1,13 +1,13 @@
 name: 'Dependency tree diff for Gradle'
-description: "Dependency tree diff generates human readable dependency diff between 2 commits, using Jake Wharton's dependency-tree-diff tool"
+description: "Generates human readable dependency diff between 2 commits, using Jake Wharton's dependency-tree-diff tool"
 inputs:
   configuration:
     description: 'Selected Gradle configuration, passed to `./gradlew dependencies --configuration xxx`. Should correspond to output artifact that is considered output of the project'
-    required: false
+    required: true
     default: 'releaseRuntimeClasspath'
   project:
     description: 'Project'
-    required: false
+    required: true
     default: 'app'
   build-root-directory:
     description: 'Build root directory'
@@ -21,6 +21,9 @@ outputs:
   text-diff:
     description: "Dependency diff"
     value: ${{ steps.diff-generator.outputs.text-diff }}
+branding:
+  color: 'red'
+  icon: 'check-square'
 runs:
   using: 'composite'
   steps:
