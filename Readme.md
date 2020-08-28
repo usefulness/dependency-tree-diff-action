@@ -1,5 +1,7 @@
 # Dependency Tree Diff - Github Action
 
+![.github/workflows/main.yml](https://github.com/usefulness/dependency-tree-diff-action/workflows/.github/workflows/main.yml/badge.svg)
+
 Simple Github Action wrapper for Jake Wharton's [Dependency Tree Diff](https://github.com/JakeWharton/dependency-tree-diff) tool.
 
 ## Usage 
