@@ -71,3 +71,11 @@ Dependency diff for root projects can be configured using `project: ''`.
 - **`build-root-directory`** - Relative path to folder containing gradle wrapper. 
 Example usage: `build-root-directory: library` **(Required)**
 - **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version _(Optional)_
+
+<details><summary></summary>
+<p>
+
+🙏 Praise 🙏 be 🙏 to 🙏 Wharton 🙏
+
+</p>
+</details>
