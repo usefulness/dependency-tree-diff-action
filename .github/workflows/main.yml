@@ -8,6 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: dependency-diff
-        uses: mateuszkwiecinski/dependency-tree-diff-action@master
-      - run: echo random-number ${{ steps.dependency-diff.outputs.text-diff }}
+        uses: ./
+        with:
+          configuration: runtimeClasspath
+          build-root-directory: testproject
+          project: ""
+      - run: echo ${{ steps.dependency-diff.outputs.text-diff }}
         shell: bash

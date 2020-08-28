@@ -1,10 +1,6 @@
 name: 'Dependency tree diff for Gradle'
 description: "Dependency tree diff generates human readable dependency diff between 2 commits, using Jake Wharton's dependency-tree-diff tool"
 inputs:
-  baseref:
-    description: 'Base ref'
-    required: true
-    default: ${{ github.base_ref }}
   configuration:
     description: 'Selected configuration'
     required: false
@@ -13,6 +9,10 @@ inputs:
     description: 'Project'
     required: false
     default: 'app'
+  build-root-directory:
+    description: 'Build root directory'
+    required: false
+    default: .
 outputs:
   text-diff:
     description: "Dependency diff"
@@ -24,6 +24,7 @@ runs:
       env:
         INPUT_PROJECT: ${{ inputs.project }}
         INPUT_CONFIGURATION: ${{ inputs.configuration }}
-        INPUT_BASEREF: ${{ inputs.baseref }}
+        INPUT_BASEREF: ${{ github.base_ref }}
+        INPUT_BUILD_ROOT_DIR: ${{ inputs.build-root-directory }}
       run: ${{ github.action_path }}/entrypoint.sh
       shell: bash
