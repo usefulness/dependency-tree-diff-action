@@ -13,6 +13,10 @@ inputs:
     description: 'Build root directory'
     required: false
     default: .
+  lib-version:
+    description: 'Dependency diff library version'
+    required: true
+    default: '1.1.0'
 outputs:
   text-diff:
     description: "Dependency diff"
@@ -26,5 +30,6 @@ runs:
         INPUT_CONFIGURATION: ${{ inputs.configuration }}
         INPUT_BASEREF: ${{ github.base_ref }}
         INPUT_BUILD_ROOT_DIR: ${{ inputs.build-root-directory }}
+        INPUT_VERSION: ${{ inputs.lib-version }}
       run: ${{ github.action_path }}/entrypoint.sh
       shell: bash
