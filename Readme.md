@@ -8,6 +8,7 @@ Simple Github Action wrapper for Jake Wharton's [Dependency Tree Diff](https://g
 The action only exposes _output_ containing the diff, so to effectively consume its output it is highly recommended to use other Github Actions to customize your experience.
 
 #### Create Pull Request comment on dependency change   
+[See it in action!](https://github.com/mateuszkwiecinski/github_browser/pull/31)  
 Create `.github/workflows/dependency_diff.yml`
 
 ```yml
@@ -66,13 +67,13 @@ All inputs with their default values:
 ```
 
 - **`configuration`** - Selected Gradle configuration, passed to `./gradlew dependencies --configuration xxx`.
-Should correspond to output artifact that is considered output of the project.  **(Required)**
+Should correspond to output artifact that is considered output of the project.
 - **`project`** - Gradle project which dependency tree diff should be generated for. 
 Dependency diff for root projects can be configured using `project: ''`. 
- For Android projects use the one that has `com.android.application` plugin applied. **(Required)**
+ For Android projects use the one that has `com.android.application` plugin applied.
 - **`build-root-directory`** - Relative path to folder containing gradle wrapper. 
-Example usage: `build-root-directory: library` **(Required)**
-- **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version _(Optional)_
+Example usage: `build-root-directory: library`
+- **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version
 
 <details><summary></summary>
 <p>
