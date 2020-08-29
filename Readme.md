@@ -8,7 +8,7 @@ Simple Github Action wrapper for Jake Wharton's [Dependency Tree Diff](https://g
 The action only exposes _output_ containing the diff, so to effectively consume its output it is highly recommended to use other Github Actions to customize your experience.
 
 #### Create Pull Request comment on dependency change   
-[Sample usage](https://github.com/mateuszkwiecinski/github_browser/pull/31)
+[See it in action!](https://github.com/mateuszkwiecinski/github_browser/pull/31)  
 Create `.github/workflows/dependency_diff.yml`
 
 ```yml
