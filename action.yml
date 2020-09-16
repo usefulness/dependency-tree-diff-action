@@ -16,7 +16,7 @@ inputs:
   lib-version:
     description: 'Dependency diff library version'
     required: true
-    default: '1.1.0'
+    default: '1.2.0'
 outputs:
   text-diff:
     description: "Dependency diff"
