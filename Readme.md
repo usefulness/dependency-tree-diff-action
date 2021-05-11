@@ -63,7 +63,7 @@ All inputs with their default values:
         configuration: 'releaseRuntimeClasspath'
         project: 'app'
         build-root-directory: .
-        lib-version: '1.1.0'
+        lib-version: '1.2.0'
 ```
 
 - **`configuration`** - Selected Gradle configuration, passed to `./gradlew dependencies --configuration xxx`.
