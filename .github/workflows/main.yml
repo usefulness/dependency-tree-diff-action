@@ -6,14 +6,30 @@ jobs:
     runs-on: ubuntu-latest
     name: Run dependency diff action
     steps:
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: 16
+          
+      - name: Cache
+        uses: gradle/gradle-build-action@v1
+        with:
+          build-root-directory: testproject
+          arguments: assemble -m
+          dependencies-cache-enabled: true    
+
       - id: dependency-diff
         uses: ./
         with:
           configuration: runtimeClasspath
           build-root-directory: testproject
           project: ""
-      - run: echo ${{ steps.dependency-diff.outputs.text-diff }}
+
+      - run: echo '${{ steps.dependency-diff.outputs.text-diff }}'
         shell: bash
