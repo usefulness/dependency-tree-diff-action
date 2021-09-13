@@ -25,20 +25,29 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: set up JDK 1.8
-      uses: actions/setup-java@v1
+
+    - name: set up JDK
+      uses: actions/setup-java@v2
       with:
-          java-version: 1.8
-    - name: Cache .gradle
-      uses: burrunan/gradle-cache-action@v1
+        distribution: 'zulu'
+        java-version: 16
+        
+    - name: Cache
+      uses: gradle/gradle-build-action@v1
+      with:
+        arguments: assemble -m
+        dependencies-cache-enabled: true    
+
     - id: dependency-diff
       name: Generate dependency diff
       uses: usefulness/dependency-tree-diff-action@v1
+
     - uses: peter-evans/find-comment@v1
       id: find_comment
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body-includes: Dependency diff
+
     - uses: peter-evans/create-or-update-comment@v1
       if: ${{ steps.dependency-diff.outputs.text-diff != null || steps.find_comment.outputs.comment-id != null }}
       with:
