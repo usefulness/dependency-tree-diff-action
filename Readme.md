@@ -29,14 +29,13 @@ jobs:
     - name: set up JDK
       uses: actions/setup-java@v2
       with:
-        distribution: 'zulu'
-        java-version: 16
+        distribution: 'temurin'
+        java-version: 17
         
     - name: Cache
-      uses: gradle/gradle-build-action@v1
+      uses: gradle/gradle-build-action@v2
       with:
-        arguments: assemble -m
-        dependencies-cache-enabled: true    
+        arguments: dependencies
 
     - id: dependency-diff
       name: Generate dependency diff
