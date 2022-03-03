@@ -6,7 +6,7 @@ wget "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INP
 
 ./gradlew projects
 ./gradlew :"$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >new_diff.txt
-git checkout --force "$INPUT_BASEREF"
+git switch --force "$INPUT_BASEREF"
 ./gradlew :"$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >old_diff.txt
 
 diff=$(java -jar dependency-tree-diff.jar old_diff.txt new_diff.txt)
