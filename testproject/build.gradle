@@ -1,5 +1,5 @@
 plugins {
-    id("com.starter.library.kotlin") version "0.43.0"
+    id("com.starter.library.kotlin") version "0.44.0"
 }
 
 repositories.google()
