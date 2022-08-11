@@ -2,6 +2,14 @@ on:
   pull_request:
 
 jobs:
+  cancel-previous-workflows:
+    name: Cancel previous workflow runs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: styfle/cancel-workflow-action@0.10.0
+        with:
+          access_token: ${{ github.token }}
+
   test-job:
     runs-on: ubuntu-latest
     name: Run dependency diff action
@@ -28,6 +36,43 @@ jobs:
         with:
           configuration: runtimeClasspath
           build-root-directory: testproject
+          project: ""
+
+      - run: echo '${{ steps.dependency-diff.outputs.text-diff }}'
+        shell: bash
+
+  test-job-with-configuration-cache:
+    runs-on: ubuntu-latest
+    name: Test additional arguments
+    steps:
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - run: |
+          mkdir -p ~/.gradle
+          printf "org.gradle.unsafe.configuration-cache=true" > ~/.gradle/gradle.properties
+        shell: bash
+
+      - name: Cache
+        uses: gradle/gradle-build-action@v2
+        with:
+          build-root-directory: testproject
+          arguments: dependencies --no-configuration-cache
+
+      - id: dependency-diff
+        uses: ./
+        with:
+          configuration: runtimeClasspath
+          build-root-directory: testproject
+          additional-gradle-arguments: "--no-configuration-cache"
           project: ""
 
       - run: echo '${{ steps.dependency-diff.outputs.text-diff }}'
