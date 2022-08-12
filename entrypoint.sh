@@ -6,6 +6,7 @@ wget "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INP
 
 ./gradlew $ADDITIONAL_GRADLE_ARGUMENTS projects
 ./gradlew $ADDITIONAL_GRADLE_ARGUMENTS :"$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >new_diff.txt
+git fetch --force origin "$INPUT_BASEREF":"$INPUT_BASEREF" --no-tags
 git switch --force "$INPUT_BASEREF"
 ./gradlew $ADDITIONAL_GRADLE_ARGUMENTS :"$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >old_diff.txt
 
