@@ -11,7 +11,8 @@ git switch --force "$INPUT_BASEREF"
 ./gradlew $ADDITIONAL_GRADLE_ARGUMENTS :"$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >old_diff.txt
 
 diff=$(java -jar dependency-tree-diff.jar old_diff.txt new_diff.txt)
-diff="${diff//'%'/'%25'}"
-diff="${diff//$'\n'/'%0A'}"
-diff="${diff//$'\r'/'%0D'}"
-echo "text-diff=$diff" >> $GITHUB_OUTPUT
+
+delimiter=$(openssl rand -hex 20)
+echo "text-diff<<$delimiter" >> $GITHUB_OUTPUT
+echo "$diff" >> $GITHUB_OUTPUT
+echo "$delimiter" >> $GITHUB_OUTPUT
