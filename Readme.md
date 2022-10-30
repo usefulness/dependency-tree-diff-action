@@ -82,7 +82,7 @@ Dependency diff for root projects can be configured using `project: ''`.
  For Android projects use the one that has `com.android.application` plugin applied.
 - **`build-root-directory`** - Relative path to folder containing gradle wrapper. 
 Example usage: `build-root-directory: library`
-- **`additional-gradle-arguments`** - Additional arguments passed to internal Gradle invocation. Example: `"--no-configuration-cache"` or `"--stactrace"`  
+- **`additional-gradle-arguments`** - Additional arguments passed to internal Gradle invocation. Example: `"--no-configuration-cache"` or `"--stacktrace"`  
 - **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version
 
 <details><summary></summary>
