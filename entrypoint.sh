@@ -14,4 +14,4 @@ diff=$(java -jar dependency-tree-diff.jar old_diff.txt new_diff.txt)
 diff="${diff//'%'/'%25'}"
 diff="${diff//$'\n'/'%0A'}"
 diff="${diff//$'\r'/'%0D'}"
-echo "::set-output name=text-diff::$diff"
+echo "text-diff=$diff" >> $GITHUB_OUTPUT
