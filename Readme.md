@@ -66,7 +66,7 @@ All inputs with their default values:
 ```yml
     - id: dependency-diff
       name: Generate dependency diff
-      uses: usefulness/dependency-tree-diff-action@master
+      uses: usefulness/dependency-tree-diff-action@v1
       with:
         configuration: 'releaseRuntimeClasspath'
         project: 'app'

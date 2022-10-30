@@ -72,7 +72,7 @@ jobs:
         with:
           configuration: runtimeClasspath
           build-root-directory: testproject
-          additional-gradle-arguments: "--no-configuration-cache"
+          additional-gradle-arguments: "--no-configuration-cache --stacktrace"
           project: ""
 
       - run: echo '${{ steps.dependency-diff.outputs.text-diff }}'
