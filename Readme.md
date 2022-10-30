@@ -41,13 +41,13 @@ jobs:
       name: Generate dependency diff
       uses: usefulness/dependency-tree-diff-action@v1
 
-    - uses: peter-evans/find-comment@v1
+    - uses: peter-evans/find-comment@v2
       id: find_comment
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body-includes: Dependency diff
 
-    - uses: peter-evans/create-or-update-comment@v1
+    - uses: peter-evans/create-or-update-comment@v2
       if: ${{ steps.dependency-diff.outputs.text-diff != null || steps.find_comment.outputs.comment-id != null }}
       with:
         body: |

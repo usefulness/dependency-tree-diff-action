@@ -25,6 +25,9 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
+      - name: Downgrade dependency version to see the diff
+        run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.1.0/g' testproject/build.gradle
+
       - name: Cache
         uses: gradle/gradle-build-action@v2
         with:
@@ -38,8 +41,24 @@ jobs:
           build-root-directory: testproject
           project: ""
 
-      - run: echo '${{ steps.dependency-diff.outputs.text-diff }}'
-        shell: bash
+      - uses: peter-evans/find-comment@v2
+        id: find_comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: Test1
+
+      - uses: peter-evans/create-or-update-comment@v2
+        if: ${{ steps.dependency-diff.outputs.text-diff != null || steps.find_comment.outputs.comment-id != null }}
+        with:
+          body: |
+            Test1
+              ```diff
+              ${{ steps.dependency-diff.outputs.text-diff }}
+              ```
+          edit-mode: replace
+          comment-id: ${{ steps.find_comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   test-job-with-configuration-cache:
     runs-on: ubuntu-latest
@@ -75,5 +94,21 @@ jobs:
           additional-gradle-arguments: "--no-configuration-cache --stacktrace"
           project: ""
 
-      - run: echo '${{ steps.dependency-diff.outputs.text-diff }}'
-        shell: bash
+      - uses: peter-evans/find-comment@v2
+        id: find_comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: Test2
+
+      - uses: peter-evans/create-or-update-comment@v2
+        if: ${{ steps.dependency-diff.outputs.text-diff != null || steps.find_comment.outputs.comment-id != null }}
+        with:
+          body: |
+            Test2
+              ```diff
+              ${{ steps.dependency-diff.outputs.text-diff }}
+              ```
+          edit-mode: replace
+          comment-id: ${{ steps.find_comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
