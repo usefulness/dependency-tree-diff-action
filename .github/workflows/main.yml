@@ -75,6 +75,9 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
+      - name: Downgrade dependency version to see the diff
+        run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.1.0/g' testproject/build.gradle
+
       - run: |
           mkdir -p ~/.gradle
           printf "org.gradle.unsafe.configuration-cache=true" > ~/.gradle/gradle.properties
