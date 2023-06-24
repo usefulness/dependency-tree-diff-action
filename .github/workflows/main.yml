@@ -1,5 +1,8 @@
 on:
   pull_request:
+  push:
+    branches:
+      - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -28,6 +31,7 @@ jobs:
           arguments: dependencies
 
       - id: dependency-diff
+        if: github.event_name == 'pull_request'
         uses: ./
         with:
           configuration: runtimeClasspath
@@ -36,6 +40,7 @@ jobs:
 
       - uses: peter-evans/find-comment@v2
         id: find_comment
+        if: github.event_name == 'pull_request'
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: Test1
@@ -82,6 +87,7 @@ jobs:
 
       - id: dependency-diff
         uses: ./
+        if: github.event_name == 'pull_request'
         with:
           configuration: runtimeClasspath
           build-root-directory: testproject
@@ -90,6 +96,7 @@ jobs:
 
       - uses: peter-evans/find-comment@v2
         id: find_comment
+        if: github.event_name == 'pull_request'
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: Test2
