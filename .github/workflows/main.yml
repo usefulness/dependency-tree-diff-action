@@ -1,35 +1,28 @@
 on:
   pull_request:
 
-jobs:
-  cancel-previous-workflows:
-    name: Cancel previous workflow runs
-    runs-on: ubuntu-latest
-    steps:
-      - uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ github.token }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
+jobs:
   test-job:
     runs-on: ubuntu-latest
     name: Run dependency diff action
     steps:
-
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: set up JDK
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: 17
+          java-version: 20
 
       - name: Downgrade dependency version to see the diff
         run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.1.0/g' testproject/build.gradle
 
-      - name: Cache
-        uses: gradle/gradle-build-action@v2
+      - uses: gradle/gradle-build-action@v2
         with:
           build-root-directory: testproject
           arguments: dependencies
@@ -64,16 +57,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Test additional arguments
     steps:
-
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: set up JDK
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: 17
+          java-version: 20
 
       - name: Downgrade dependency version to see the diff
         run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.1.0/g' testproject/build.gradle
