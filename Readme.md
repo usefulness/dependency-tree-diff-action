@@ -26,14 +26,12 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: set up JDK
-      uses: actions/setup-java@v3
+    - uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: 21
         
-    - name: Cache
-      uses: gradle/gradle-build-action@v2
+    - uses: gradle/gradle-build-action@v2
       with:
         arguments: dependencies
 
