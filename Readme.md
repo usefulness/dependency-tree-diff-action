@@ -70,7 +70,7 @@ All inputs with their default values:
         project: 'app'
         build-root-directory: .
         additional-gradle-arguments: ''
-        lib-version: '1.2.0'
+        lib-version: '1.2.1'
 ```
 
 - **`configuration`** - Selected Gradle configuration, passed to `./gradlew dependencies --configuration xxx`.
