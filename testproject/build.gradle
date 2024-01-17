@@ -2,6 +2,10 @@ plugins {
     id("com.starter.library.kotlin") version "0.69.0"
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
 dependencies {
     implementation("androidx.paging:paging-common-ktx:3.2.1")
 }

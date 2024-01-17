@@ -10,7 +10,7 @@ if [ "$INPUT_VERSION" == "latest" ]; then
   | wget -qi - -O dependency-tree-diff.jar
 else
   wget "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INPUT_VERSION/dependency-tree-diff.jar" -q -O dependency-tree-diff.jar
-  fi
+fi
 
 if [ "$INPUT_PROJECT" == ":" ]; then
   INPUT_PROJECT=""

@@ -23,15 +23,13 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
 
     - uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: 21
         
-    - uses: gradle/gradle-build-action@v2
+    - uses: gradle/gradle-build-action@v3
       with:
         arguments: dependencies
 
@@ -39,13 +37,13 @@ jobs:
       name: Generate dependency diff
       uses: usefulness/dependency-tree-diff-action@v1
 
-    - uses: peter-evans/find-comment@v2
+    - uses: peter-evans/find-comment@v3
       id: find_comment
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body-includes: Dependency diff
 
-    - uses: peter-evans/create-or-update-comment@v2
+    - uses: peter-evans/create-or-update-comment@v3
       if: ${{ steps.dependency-diff.outputs.text-diff != null || steps.find_comment.outputs.comment-id != null }}
       with:
         body: |

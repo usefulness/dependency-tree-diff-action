@@ -44,5 +44,5 @@ runs:
         INPUT_VERSION: ${{ inputs.lib-version }}
         ADDITIONAL_GRADLE_ARGUMENTS: ${{ inputs.additional-gradle-arguments }}
         INPUT_DEBUG: ${{ inputs.debug }}
-      run: ${{ github.action_path }}/entrypoint.sh
+      run: $GITHUB_ACTION_PATH/entrypoint.sh
       shell: bash
