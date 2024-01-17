@@ -37,6 +37,7 @@ jobs:
           configuration: runtimeClasspath
           build-root-directory: testproject
           project: ""
+          debug: "true"
 
       - uses: peter-evans/find-comment@v3
         id: find_comment
@@ -90,6 +91,7 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           configuration: runtimeClasspath
+          lib-version: "1.2.1"
           build-root-directory: testproject
           additional-gradle-arguments: "--no-configuration-cache --stacktrace"
           project: ""

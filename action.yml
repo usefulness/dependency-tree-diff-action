@@ -16,11 +16,15 @@ inputs:
   lib-version:
     description: 'Dependency diff library version'
     required: true
-    default: '1.2.1'
+    default: 'latest'
   additional-gradle-arguments:
     description: 'Additional arguments passed to gradle commands'
     required: false
     default: ''
+  debug:
+    description: 'Enable debug logs'
+    required: false
+    default: 'false'
 outputs:
   text-diff:
     description: "Dependency diff"
@@ -39,5 +43,6 @@ runs:
         INPUT_BUILD_ROOT_DIR: ${{ inputs.build-root-directory }}
         INPUT_VERSION: ${{ inputs.lib-version }}
         ADDITIONAL_GRADLE_ARGUMENTS: ${{ inputs.additional-gradle-arguments }}
+        INPUT_DEBUG: ${{ inputs.debug }}
       run: ${{ github.action_path }}/entrypoint.sh
       shell: bash

@@ -2,13 +2,26 @@
 
 cd "$INPUT_BUILD_ROOT_DIR"
 
-wget "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INPUT_VERSION/dependency-tree-diff.jar" -q -O dependency-tree-diff.jar
+if [ "$INPUT_VERSION" == "latest" ]; then
+  curl -s https://api.github.com/repos/JakeWharton/dependency-tree-diff/releases/latest \
+  | grep "/dependency-tree-diff.jar" \
+  | cut -d : -f 2,3 \
+  | tr -d \" \
+  | wget -qi - -O dependency-tree-diff.jar
+else
+  wget "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INPUT_VERSION/dependency-tree-diff.jar" -q -O dependency-tree-diff.jar
+  fi
 
 if [ "$INPUT_PROJECT" == ":" ]; then
   INPUT_PROJECT=""
 fi
 
-./gradlew $ADDITIONAL_GRADLE_ARGUMENTS projects
+
+if [ "$INPUT_DEBUG" == "true" ]; then
+  echo "download finished"
+  ls -al
+  ./gradlew $ADDITIONAL_GRADLE_ARGUMENTS projects
+fi
 ./gradlew $ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >new_diff.txt
 git fetch --force origin "$INPUT_BASEREF":"$INPUT_BASEREF" --no-tags
 git switch --force "$INPUT_BASEREF"
