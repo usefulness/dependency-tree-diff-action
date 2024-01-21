@@ -7,15 +7,14 @@ if [ "$INPUT_VERSION" == "latest" ]; then
   | grep "/dependency-tree-diff.jar" \
   | cut -d : -f 2,3 \
   | tr -d \" \
-  | wget -qi - -O dependency-tree-diff.jar
+  | xargs curl -L -s -o dependency-tree-diff.jar
 else
-  wget "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INPUT_VERSION/dependency-tree-diff.jar" -q -O dependency-tree-diff.jar
+  curl -L -s -o dependency-tree-diff.jar "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INPUT_VERSION/dependency-tree-diff.jar"
 fi
 
 if [ "$INPUT_PROJECT" == ":" ]; then
   INPUT_PROJECT=""
 fi
-
 
 if [ "$INPUT_DEBUG" == "true" ]; then
   echo "download finished"
