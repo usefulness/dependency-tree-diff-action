@@ -151,3 +151,4 @@ jobs:
           build-root-directory: testproject
           project: ""
           debug: true
+          additional-gradle-arguments: "--scan"
