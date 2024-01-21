@@ -29,6 +29,7 @@ jobs:
         with:
           build-root-directory: testproject
           arguments: dependencies
+          gradle-home-cache-cleanup: true
 
       - id: dependency-diff
         if: github.event_name == 'pull_request'
@@ -84,6 +85,7 @@ jobs:
         with:
           build-root-directory: testproject
           arguments: dependencies --no-configuration-cache
+          gradle-home-cache-cleanup: true
 
       - id: dependency-diff
         uses: ./
@@ -119,7 +121,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     name: Execute on ${{ matrix.os }} runner
     steps:
@@ -139,6 +141,7 @@ jobs:
         with:
           build-root-directory: testproject
           arguments: dependencies
+          gradle-home-cache-cleanup: true
 
       - id: dependency-diff
         uses: ./

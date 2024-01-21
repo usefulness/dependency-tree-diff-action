@@ -61,14 +61,13 @@ jobs:
 All inputs with their default values:
 ```yml
     - id: dependency-diff
-      name: Generate dependency diff
       uses: usefulness/dependency-tree-diff-action@v1
       with:
         configuration: 'releaseRuntimeClasspath'
         project: 'app'
         build-root-directory: .
         additional-gradle-arguments: ''
-        lib-version: '1.2.1'
+        lib-version: 'latest'
 ```
 
 - **`configuration`** - Selected Gradle configuration, passed to `./gradlew dependencies --configuration xxx`.
@@ -79,7 +78,7 @@ Dependency diff for root projects can be configured using `project: ''`.
 - **`build-root-directory`** - Relative path to folder containing gradle wrapper. 
 Example usage: `build-root-directory: library`
 - **`additional-gradle-arguments`** - Additional arguments passed to internal Gradle invocation. Example: `"--no-configuration-cache"` or `"--stacktrace"`  
-- **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version
+- **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version. Example: `"1.2.1"`, `"1.1.0"`, `"latest"`
 
 <details><summary></summary>
 <p>
