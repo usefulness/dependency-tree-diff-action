@@ -8,6 +8,8 @@ if [ "$INPUT_PROJECT" == ":" ]; then
   INPUT_PROJECT=""
 fi
 
+current_head=$(git rev-parse HEAD)
+
 ./gradlew $ADDITIONAL_GRADLE_ARGUMENTS projects
 ./gradlew $ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >new_diff.txt
 git fetch --force origin "$INPUT_BASEREF":"$INPUT_BASEREF" --no-tags
@@ -20,3 +22,5 @@ delimiter=$(openssl rand -hex 20)
 echo "text-diff<<$delimiter" >> $GITHUB_OUTPUT
 echo "$diff" >> $GITHUB_OUTPUT
 echo "$delimiter" >> $GITHUB_OUTPUT
+
+git checkout "$current_head"
