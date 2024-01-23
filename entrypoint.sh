@@ -22,6 +22,9 @@ if [ "$INPUT_DEBUG" == "true" ]; then
   java -version
   ls -al
 fi
+
+current_head=$(git rev-parse HEAD)
+
 ./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >new_diff.txt
 git fetch --force origin "$INPUT_BASEREF":"$INPUT_BASEREF" --no-tags
 git switch --force "$INPUT_BASEREF"
@@ -33,3 +36,5 @@ delimiter=$(openssl rand -hex 20)
 echo "text-diff<<$delimiter" >> $GITHUB_OUTPUT
 echo "$diff" >> $GITHUB_OUTPUT
 echo "$delimiter" >> $GITHUB_OUTPUT
+
+git checkout "$current_head"
