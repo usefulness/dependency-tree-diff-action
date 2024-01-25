@@ -38,7 +38,7 @@ jobs:
           build-root-directory: testproject
           project: ""
 
-      - uses: peter-evans/find-comment@v2
+      - uses: peter-evans/find-comment@v3
         id: find_comment
         if: github.event_name == 'pull_request'
         with:
@@ -94,7 +94,7 @@ jobs:
           additional-gradle-arguments: "--no-configuration-cache --stacktrace"
           project: ""
 
-      - uses: peter-evans/find-comment@v2
+      - uses: peter-evans/find-comment@v3
         id: find_comment
         if: github.event_name == 'pull_request'
         with:
