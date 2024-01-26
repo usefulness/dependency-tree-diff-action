@@ -20,7 +20,6 @@ if [ "$INPUT_DEBUG" == "true" ]; then
   echo "download finished"
   echo "$JAVA_HOME"
   java -version
-  ls -al
 fi
 
 current_head=$(git rev-parse HEAD)
