@@ -37,4 +37,4 @@ echo "text-diff<<$delimiter" >> $GITHUB_OUTPUT
 echo "$diff" >> $GITHUB_OUTPUT
 echo "$delimiter" >> $GITHUB_OUTPUT
 
-git checkout "$current_head"
+git switch --detach "$current_head"
