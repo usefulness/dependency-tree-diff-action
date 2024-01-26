@@ -23,15 +23,13 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
 
     - uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: 21
         
-    - uses: gradle/gradle-build-action@v2
+    - uses: gradle/gradle-build-action@v3
       with:
         arguments: dependencies
 
@@ -39,13 +37,13 @@ jobs:
       name: Generate dependency diff
       uses: usefulness/dependency-tree-diff-action@v1
 
-    - uses: peter-evans/find-comment@v2
+    - uses: peter-evans/find-comment@v3
       id: find_comment
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body-includes: Dependency diff
 
-    - uses: peter-evans/create-or-update-comment@v2
+    - uses: peter-evans/create-or-update-comment@v3
       if: ${{ steps.dependency-diff.outputs.text-diff != null || steps.find_comment.outputs.comment-id != null }}
       with:
         body: |
@@ -63,14 +61,13 @@ jobs:
 All inputs with their default values:
 ```yml
     - id: dependency-diff
-      name: Generate dependency diff
       uses: usefulness/dependency-tree-diff-action@v1
       with:
         configuration: 'releaseRuntimeClasspath'
         project: 'app'
         build-root-directory: .
         additional-gradle-arguments: ''
-        lib-version: '1.2.1'
+        lib-version: 'latest'
 ```
 
 - **`configuration`** - Selected Gradle configuration, passed to `./gradlew dependencies --configuration xxx`.
@@ -81,7 +78,7 @@ Dependency diff for root projects can be configured using `project: ''`.
 - **`build-root-directory`** - Relative path to folder containing gradle wrapper. 
 Example usage: `build-root-directory: library`
 - **`additional-gradle-arguments`** - Additional arguments passed to internal Gradle invocation. Example: `"--no-configuration-cache"` or `"--stacktrace"`  
-- **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version
+- **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version. Example: `"1.2.1"`, `"1.1.0"`, `"latest"`
 
 <details><summary></summary>
 <p>

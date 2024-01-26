@@ -5,6 +5,10 @@ pluginManagement {
     }
 }
 
+plugins {
+    id("com.gradle.enterprise") version "3.16.1"
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -14,3 +18,17 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = 'com.starter.dependencydiff.test'
+
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+
+        uploadInBackground = System.getenv("CI") == null
+
+        if (System.getenv("CI")) {
+            publishAlways()
+            tag "CI"
+        }
+    }
+}
