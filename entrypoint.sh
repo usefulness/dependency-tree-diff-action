@@ -18,14 +18,14 @@ fi
 
 if [ "$INPUT_DEBUG" == "true" ]; then
   echo "download finished"
-  echo $JAVA_HOME
+  echo "$JAVA_HOME"
   java -version
   ls -al
 fi
-./gradlew $ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >new_diff.txt
+./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >new_diff.txt
 git fetch --force origin "$INPUT_BASEREF":"$INPUT_BASEREF" --no-tags
 git switch --force "$INPUT_BASEREF"
-./gradlew $ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >old_diff.txt
+./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" >old_diff.txt
 
 diff=$(java -jar dependency-tree-diff.jar old_diff.txt new_diff.txt)
 
