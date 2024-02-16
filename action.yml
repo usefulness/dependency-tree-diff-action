@@ -29,6 +29,9 @@ outputs:
   text-diff:
     description: "Dependency diff"
     value: ${{ steps.diff-generator.outputs.text-diff }}
+  file-diff:
+    description: "Path to a file containing the raw diff output"
+    value: ${{ steps.diff-generator.outputs.file-diff }}
 branding:
   color: 'red'
   icon: 'check-square'
