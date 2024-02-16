@@ -40,6 +40,12 @@ jobs:
           project: ""
           debug: true
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: file-diff-test-1
+          path: ${{ steps.dependency-diff.outputs.file-diff }}
+          if-no-files-found: error
+
       - uses: peter-evans/find-comment@v3
         id: find_comment
         if: github.event_name == 'pull_request'
@@ -55,6 +61,8 @@ jobs:
               ```diff
               ${{ steps.dependency-diff.outputs.text-diff }}
               ```
+            
+             file path: `${{ steps.dependency-diff.outputs.file-diff }}`
           edit-mode: replace
           comment-id: ${{ steps.find_comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
@@ -97,6 +105,12 @@ jobs:
           additional-gradle-arguments: "--no-configuration-cache --stacktrace"
           project: ""
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: file-diff-test-2
+          path: ${{ steps.dependency-diff.outputs.file-diff }}
+          if-no-files-found: error
+
       - uses: peter-evans/find-comment@v3
         id: find_comment
         if: github.event_name == 'pull_request'
@@ -121,7 +135,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [ windows-latest, ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     name: Execute on ${{ matrix.os }} runner
     steps:
@@ -152,3 +166,9 @@ jobs:
           project: ""
           debug: true
           additional-gradle-arguments: "--scan"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: file-diff-test-on-${{ matrix.os }}
+          path: ${{ steps.dependency-diff.outputs.file-diff }}
+          if-no-files-found: error
