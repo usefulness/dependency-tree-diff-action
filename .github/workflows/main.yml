@@ -42,8 +42,20 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: file-diff-test-1
+          name: file-diff-test-1-output
           path: ${{ steps.dependency-diff.outputs.file-diff }}
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: file-diff-test-1-dependencies-previous
+          path: ${{ steps.dependency-diff.outputs.dependencies-previous }}
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: file-diff-test-1-dependencies-current
+          path: ${{ steps.dependency-diff.outputs.dependencies-current }}
           if-no-files-found: error
 
       - uses: peter-evans/find-comment@v3
@@ -63,6 +75,8 @@ jobs:
               ```
             
              file path: `${{ steps.dependency-diff.outputs.file-diff }}`
+             previous dependencies: `${{ steps.dependency-diff.outputs.dependencies-previous }}`
+             current dependencies: `${{ steps.dependency-diff.outputs.dependencies-current }}`
           edit-mode: replace
           comment-id: ${{ steps.find_comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}

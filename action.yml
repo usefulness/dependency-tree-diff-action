@@ -32,6 +32,12 @@ outputs:
   file-diff:
     description: "Path to a file containing the raw diff output"
     value: ${{ steps.diff-generator.outputs.file-diff }}
+  dependencies-current:
+    description: ""
+    value: ${{ steps.diff-generator.outputs.dependencies-current }}
+  dependencies-previous:
+    description: ""
+    value: ${{ steps.diff-generator.outputs.dependencies-previous }}
 branding:
   color: 'red'
   icon: 'check-square'
