@@ -25,25 +25,26 @@ fi
 
 current_head=$(git rev-parse HEAD)
 
-./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" > new_diff.txt
+./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" > dependency_tree_diff_dependencies_current.txt
 git fetch --force origin "$INPUT_BASEREF":"$INPUT_BASEREF" --no-tags
 git switch --force "$INPUT_BASEREF"
-./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" > old_diff.txt
-java -jar dependency-tree-diff.jar old_diff.txt new_diff.txt > tree_diff.txt
+./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" > dependency_tree_diff_dependencies_previous.txt
+java -jar dependency-tree-diff.jar dependency_tree_diff_dependencies_previous.txt dependency_tree_diff_dependencies_current.txt > dependency_tree_diff_output.txt
 
 if [ "$INPUT_DEBUG" == "true" ]; then
   echo "diff generated"
   ls -al
-  du tree_diff.txt
-  realpath tree_diff.txt
+  realpath dependency_tree_diff_output.txt
   pwd
 fi
 
 delimiter=$(openssl rand -hex 20)
 echo "text-diff<<$delimiter" >> $GITHUB_OUTPUT
-cat tree_diff.txt >> $GITHUB_OUTPUT
+cat dependency_tree_diff_output.txt >> $GITHUB_OUTPUT
 echo "$delimiter" >> $GITHUB_OUTPUT
 
-echo "file-diff=$(realpath tree_diff.txt)" >> $GITHUB_OUTPUT
+echo "file-diff=$(realpath dependency_tree_diff_output.txt)" >> $GITHUB_OUTPUT
+echo "dependencies-previous=$(realpath dependency_tree_diff_dependencies_previous.txt)" >> $GITHUB_OUTPUT
+echo "dependencies-current=$(realpath dependency_tree_diff_dependencies_current.txt)" >> $GITHUB_OUTPUT
 
 git switch --detach "$current_head"
