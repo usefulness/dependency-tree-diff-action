@@ -50,15 +50,15 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'pull_request'
         with:
-          name: file-diff-test-1-dependencies-previous
-          path: ${{ steps.dependency-diff.outputs.dependencies-previous }}
+          name: file-diff-test-1-dependencies-base
+          path: ${{ steps.dependency-diff.outputs.file-dependencies-base }}
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'pull_request'
         with:
-          name: file-diff-test-1-dependencies-current
-          path: ${{ steps.dependency-diff.outputs.dependencies-current }}
+          name: file-diff-test-1-dependencies-head
+          path: ${{ steps.dependency-diff.outputs.file-dependencies-head }}
           if-no-files-found: error
 
       - uses: peter-evans/find-comment@v3
@@ -77,9 +77,9 @@ jobs:
               ${{ steps.dependency-diff.outputs.text-diff }}
               ```
             
-             file path: `${{ steps.dependency-diff.outputs.file-diff }}`
-             previous dependencies: `${{ steps.dependency-diff.outputs.dependencies-previous }}`
-             current dependencies: `${{ steps.dependency-diff.outputs.dependencies-current }}`
+             output path: `${{ steps.dependency-diff.outputs.file-diff }}`
+             base dependencies: `${{ steps.dependency-diff.outputs.file-dependencies-base }}`
+             head dependencies: `${{ steps.dependency-diff.outputs.file-dependencies-head }}`
           edit-mode: replace
           comment-id: ${{ steps.find_comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
