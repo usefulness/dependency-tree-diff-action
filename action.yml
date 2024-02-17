@@ -32,12 +32,12 @@ outputs:
   file-diff:
     description: "Path to a file containing the raw diff output"
     value: ${{ steps.diff-generator.outputs.file-diff }}
-  dependencies-current:
+  file-dependencies-head:
     description: "Path to a file containing dependencies dump from currently checked out ref"
-    value: ${{ steps.diff-generator.outputs.dependencies-current }}
-  dependencies-previous:
+    value: ${{ steps.diff-generator.outputs.file-dependencies-head }}
+  file-dependencies-base:
     description: "Path to a file containing dependencies dump from `github.base_ref`"
-    value: ${{ steps.diff-generator.outputs.dependencies-previous }}
+    value: ${{ steps.diff-generator.outputs.file-dependencies-base }}
 branding:
   color: 'red'
   icon: 'check-square'
