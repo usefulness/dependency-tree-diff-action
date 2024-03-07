@@ -35,7 +35,7 @@ jobs:
 
     - id: dependency-diff
       name: Generate dependency diff
-      uses: usefulness/dependency-tree-diff-action@v1
+      uses: usefulness/dependency-tree-diff-action@v2
 
     - uses: peter-evans/find-comment@v3
       id: find_comment
@@ -61,7 +61,7 @@ jobs:
 All inputs with their default values:
 ```yml
     - id: dependency-diff
-      uses: usefulness/dependency-tree-diff-action@v1
+      uses: usefulness/dependency-tree-diff-action@v2
       with:
         configuration: 'releaseRuntimeClasspath'
         project: 'app'
