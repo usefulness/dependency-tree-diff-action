@@ -29,7 +29,7 @@ jobs:
         distribution: 'temurin'
         java-version: 21
         
-    - uses: gradle/gradle-build-action@v3
+    - uses: gradle/actions/setup-gradle@v3
       with:
         arguments: dependencies
 
