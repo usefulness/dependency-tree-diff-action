@@ -16,10 +16,10 @@ develocity {
 
         if (System.getenv("CI")) {
             tag "CI"
-            uploadInBackground false
+            uploadInBackground = false
         } else {
             publishing { onlyIf { false } }
-            uploadInBackground true
+            uploadInBackground = true
         }
     }
 }
