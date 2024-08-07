@@ -7,5 +7,5 @@ kotlin {
 }
 
 dependencies {
-    implementation("androidx.paging:paging-common-ktx:3.3.1")
+    implementation("androidx.paging:paging-common-ktx:3.3.2")
 }
