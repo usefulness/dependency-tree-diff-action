@@ -22,16 +22,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - uses: actions/setup-java@v3
+    - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 21
         
-    - uses: gradle/actions/setup-gradle@v3
-      with:
-        arguments: dependencies
+    - uses: gradle/actions/setup-gradle@v4
 
     - id: dependency-diff
       name: Generate dependency diff
@@ -43,7 +41,7 @@ jobs:
         issue-number: ${{ github.event.pull_request.number }}
         body-includes: Dependency diff
 
-    - uses: peter-evans/create-or-update-comment@v3
+    - uses: peter-evans/create-or-update-comment@v4
       if: ${{ steps.dependency-diff.outputs.text-diff != null || steps.find_comment.outputs.comment-id != null }}
       with:
         body: |
