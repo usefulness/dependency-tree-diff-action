@@ -26,9 +26,6 @@ jobs:
         run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.2.0/g' testproject/build.gradle
 
       - uses: gradle/actions/setup-gradle@v4
-
-      - run: ./gradlew dependencies
-        working-directory: testproject
         
       - id: dependency-diff
         if: github.event_name == 'pull_request'
@@ -106,9 +103,6 @@ jobs:
         shell: bash
 
       - uses: gradle/actions/setup-gradle@v4
-
-      - run: ./gradlew dependencies --no-configuration-cache
-        working-directory: testproject
 
       - id: dependency-diff
         uses: ./
