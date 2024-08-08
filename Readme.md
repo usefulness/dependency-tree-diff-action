@@ -29,9 +29,10 @@ jobs:
         distribution: 'temurin'
         java-version: 21
         
-    - uses: gradle/actions/setup-gradle@v3
-      with:
-        arguments: dependencies
+    - uses: gradle/actions/setup-gradle@v4
+
+    - name: Run dependencies
+      run: ./gradlew dependencies
 
     - id: dependency-diff
       name: Generate dependency diff
