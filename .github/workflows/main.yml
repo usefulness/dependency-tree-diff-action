@@ -158,8 +158,15 @@ jobs:
           distribution: 'temurin'
           java-version: 23
 
-      - name: Downgrade dependency version to see the diff
+      - name: Downgrade dependency version to see the diff (Unix)
+        if: runner.os != 'Windows'
         run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.2.0/g' testproject/build.gradle
+
+      - name: Downgrade dependency version to see the diff (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          (Get-Content testproject/build.gradle) -replace 'androidx\.paging:paging-common-ktx:\d+\.\d+\.\d+', 'androidx.paging:paging-common-ktx:3.2.0' | Set-Content testproject/build.gradle
+        shell: pwsh
 
       - uses: gradle/actions/setup-gradle@v4
 
@@ -177,7 +184,7 @@ jobs:
           additional-gradle-arguments: "--scan"
 
       - uses: actions/upload-artifact@v4
-        if: github.event_name == 'pull_request' && matrix.os != 'windows-latest' # https://github.com/actions/upload-artifact/issues/337
+        if: github.event_name == 'pull_request'
         with:
           name: file-diff-test-on-${{ matrix.os }}
           path: ${{ steps.dependency-diff.outputs.file-diff }}

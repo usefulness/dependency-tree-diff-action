@@ -1,4 +1,4 @@
-name: 'Dependency tree diff for Gradle'
+name: 'Dependency tree diff for Gradle cross platform'
 description: "Generates human readable dependency diff between 2 commits, using Jake Wharton's dependency-tree-diff tool"
 inputs:
   configuration:
@@ -12,7 +12,7 @@ inputs:
   build-root-directory:
     description: 'Build root directory'
     required: false
-    default: .
+    default: '.'
   lib-version:
     description: 'Dependency diff library version'
     required: true
@@ -28,23 +28,24 @@ inputs:
 outputs:
   text-diff:
     description: "Dependency diff"
-    value: ${{ steps.diff-generator.outputs.text-diff }}
+    value: ${{ steps.diff-generator-unix.outputs.text-diff || steps.diff-generator-windows.outputs.text-diff }}
   file-diff:
     description: "Path to a file containing the raw diff output"
-    value: ${{ steps.diff-generator.outputs.file-diff }}
+    value: ${{ steps.diff-generator-unix.outputs.file-diff || steps.diff-generator-windows.outputs.file-diff }}
   file-dependencies-head:
     description: "Path to a file containing dependencies dump from currently checked out ref"
-    value: ${{ steps.diff-generator.outputs.file-dependencies-head }}
+    value: ${{ steps.diff-generator-unix.outputs.file-dependencies-head || steps.diff-generator-windows.outputs.file-dependencies-head }}
   file-dependencies-base:
     description: "Path to a file containing dependencies dump from `github.base_ref`"
-    value: ${{ steps.diff-generator.outputs.file-dependencies-base }}
+    value: ${{ steps.diff-generator-unix.outputs.file-dependencies-base || steps.diff-generator-windows.outputs.file-dependencies-base }}
 branding:
   color: 'red'
   icon: 'check-square'
 runs:
   using: 'composite'
   steps:
-    - id: diff-generator
+    - id: diff-generator-unix
+      if: runner.os != 'Windows'
       env:
         INPUT_PROJECT: ${{ inputs.project }}
         INPUT_CONFIGURATION: ${{ inputs.configuration }}
@@ -55,3 +56,16 @@ runs:
         INPUT_DEBUG: ${{ inputs.debug }}
       run: $GITHUB_ACTION_PATH/entrypoint.sh
       shell: bash
+    
+    - id: diff-generator-windows
+      if: runner.os == 'Windows'
+      env:
+        INPUT_PROJECT: ${{ inputs.project }}
+        INPUT_CONFIGURATION: ${{ inputs.configuration }}
+        INPUT_BASEREF: ${{ github.base_ref }}
+        INPUT_BUILD_ROOT_DIR: ${{ inputs.build-root-directory }}
+        INPUT_VERSION: ${{ inputs.lib-version }}
+        INPUT_ADDITIONAL_GRADLE_ARGUMENTS: ${{ inputs.additional-gradle-arguments }}
+        INPUT_DEBUG: ${{ inputs.debug }}
+      run: "& \"$env:GITHUB_ACTION_PATH/entrypoint.ps1\""
+      shell: pwsh
