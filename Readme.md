@@ -1,11 +1,11 @@
-# Dependency Tree Diff - Github Action
+# Dependency Tree Diff - GitHub Action
 
 ![.github/workflows/main.yml](https://github.com/usefulness/dependency-tree-diff-action/workflows/.github/workflows/main.yml/badge.svg)
 
-Simple Github Action wrapper for Jake Wharton's [Dependency Tree Diff](https://github.com/JakeWharton/dependency-tree-diff) tool.
+Simple GitHub Action wrapper for Jake Wharton's [Dependency Tree Diff](https://github.com/JakeWharton/dependency-tree-diff) tool.
 
 ## Usage 
-The action only exposes _output_ containing the diff, so to effectively consume its output it is highly recommended to use other Github Actions to customize your experience.
+The action only exposes _output_ containing the diff, so to effectively consume its output, it is highly recommended to use other GitHub Actions to customize your experience.
 
 #### Create Pull Request comment on dependency change   
 [See it in action!](https://github.com/mateuszkwiecinski/github_browser/pull/31)  
@@ -69,7 +69,7 @@ All inputs with their default values:
 ```
 
 - **`configuration`** - Selected Gradle configuration, passed to `./gradlew dependencies --configuration xxx`.
-Should correspond to output artifact that is considered output of the project.
+It should correspond to output artifact considered output of the project.
 - **`project`** - Gradle project which dependency tree diff should be generated for. 
 Dependency diff for root projects can be configured using `project: ''`. 
  For Android projects use the one that has `com.android.application` plugin applied.
