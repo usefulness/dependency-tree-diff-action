@@ -23,6 +23,8 @@ if [ "$INPUT_DEBUG" == "true" ]; then
   ls -al
 fi
 
+chmod +x dependency-tree-diff.jar
+
 current_head=$(git rev-parse HEAD)
 
 ./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" > dependency-tree-diff_dependencies-head.txt
