@@ -54,6 +54,7 @@ runs:
         INPUT_VERSION: ${{ inputs.lib-version }}
         INPUT_ADDITIONAL_GRADLE_ARGUMENTS: ${{ inputs.additional-gradle-arguments }}
         INPUT_DEBUG: ${{ inputs.debug }}
+        GITHUB_TOKEN: ${{ github.token }}
       run: $GITHUB_ACTION_PATH/entrypoint.sh
       shell: bash
     
@@ -67,5 +68,6 @@ runs:
         INPUT_VERSION: ${{ inputs.lib-version }}
         INPUT_ADDITIONAL_GRADLE_ARGUMENTS: ${{ inputs.additional-gradle-arguments }}
         INPUT_DEBUG: ${{ inputs.debug }}
+        GITHUB_TOKEN: ${{ github.token }}
       run: "& \"$env:GITHUB_ACTION_PATH/entrypoint.ps1\""
       shell: pwsh

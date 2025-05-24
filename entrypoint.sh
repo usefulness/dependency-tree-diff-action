@@ -3,13 +3,13 @@
 cd "$INPUT_BUILD_ROOT_DIR"
 
 if [ "$INPUT_VERSION" == "latest" ]; then
-  curl -s https://api.github.com/repos/JakeWharton/dependency-tree-diff/releases/latest \
+  curl -H "Authorization: Bearer $GITHUB_TOKEN" -s https://api.github.com/repos/JakeWharton/dependency-tree-diff/releases/latest \
   | grep "/dependency-tree-diff.jar" \
   | cut -d : -f 2,3 \
   | tr -d \" \
-  | xargs curl -L -s -o dependency-tree-diff.jar
+  | xargs curl -H "Authorization: Bearer $GITHUB_TOKEN" -L -s -o dependency-tree-diff.jar
 else
-  curl -L -s -o dependency-tree-diff.jar "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INPUT_VERSION/dependency-tree-diff.jar"
+  curl -H "Authorization: Bearer $GITHUB_TOKEN" -L -s -o dependency-tree-diff.jar "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INPUT_VERSION/dependency-tree-diff.jar"
 fi
 
 if [ "$INPUT_PROJECT" == ":" ]; then
