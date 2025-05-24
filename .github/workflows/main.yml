@@ -23,6 +23,7 @@ jobs:
           java-version: 23
 
       - name: Downgrade dependency version to see the diff
+        if: runner.os != 'macOS'
         run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.2.0/g' testproject/build.gradle
 
       - uses: gradle/actions/setup-gradle@v4
@@ -145,7 +146,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-14, windows-latest, ubuntu-latest]
+        os: [ macos-latest, windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     name: Execute on ${{ matrix.os }} runner
     steps:
@@ -159,8 +160,12 @@ jobs:
           java-version: 23
 
       - name: Downgrade dependency version to see the diff (Unix)
-        if: runner.os != 'Windows'
+        if: runner.os != 'Windows' && runner.os != 'macOS'
         run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.2.0/g' testproject/build.gradle
+
+      - name: Downgrade dependency version to see the diff (macOS)
+        if: runner.os == 'macOS'
+        run: sed -i '' -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.2.0/g' testproject/build.gradle
 
       - name: Downgrade dependency version to see the diff (Windows)
         if: runner.os == 'Windows'

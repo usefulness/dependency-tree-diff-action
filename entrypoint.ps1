@@ -5,20 +5,25 @@ param(
     [string]$InputBuildRootDir = $env:INPUT_BUILD_ROOT_DIR,
     [string]$InputVersion = $env:INPUT_VERSION,
     [string]$InputAdditionalGradleArguments = $env:INPUT_ADDITIONAL_GRADLE_ARGUMENTS,
-    [string]$InputDebug = $env:INPUT_DEBUG
+    [string]$InputDebug = $env:INPUT_DEBUG,
+    [string]$GithubToken = $env:GITHUB_TOKEN
 )
 
 $ErrorActionPreference = "Stop"
 
 Set-Location $InputBuildRootDir
 
+$headers = @{
+    Authorization = "Bearer $GithubToken"
+}
+
 if ($InputVersion -eq "latest") {
-    $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/JakeWharton/dependency-tree-diff/releases/latest"
+    $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/JakeWharton/dependency-tree-diff/releases/latest" -Headers $headers
     $downloadUrl = $latestRelease.assets | Where-Object { $_.name -eq "dependency-tree-diff.jar" } | Select-Object -ExpandProperty browser_download_url
-    Invoke-WebRequest -Uri $downloadUrl -OutFile "dependency-tree-diff.jar"
+    Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile "dependency-tree-diff.jar"
 } else {
     $downloadUrl = "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$InputVersion/dependency-tree-diff.jar"
-    Invoke-WebRequest -Uri $downloadUrl -OutFile "dependency-tree-diff.jar"
+    Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile "dependency-tree-diff.jar"
 }
 
 if ($InputProject -eq ":") {
@@ -29,6 +34,7 @@ if ($InputDebug -eq "true") {
     Write-Host "download finished"
     Write-Host "JAVA_HOME: $env:JAVA_HOME"
     java -version
+    Get-Location
 }
 
 $currentHead = git rev-parse HEAD
@@ -61,4 +67,4 @@ $headPath = Resolve-Path "dependency-tree-diff_dependencies-head.txt"
 "file-dependencies-base=$basePath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding UTF8
 "file-dependencies-head=$headPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding UTF8
 
-git switch --detach $currentHead 
+git switch --detach $currentHead
