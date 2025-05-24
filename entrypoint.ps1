@@ -29,6 +29,7 @@ if ($InputDebug -eq "true") {
     Write-Host "download finished"
     Write-Host "JAVA_HOME: $env:JAVA_HOME"
     java -version
+    Get-Location
 }
 
 $currentHead = git rev-parse HEAD
