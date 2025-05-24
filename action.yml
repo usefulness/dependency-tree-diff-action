@@ -1,4 +1,4 @@
-name: 'Dependency tree diff for Gradle cross platform'
+name: 'Dependency tree diff for Gradle'
 description: "Generates human readable dependency diff between 2 commits, using Jake Wharton's dependency-tree-diff tool"
 inputs:
   configuration:
