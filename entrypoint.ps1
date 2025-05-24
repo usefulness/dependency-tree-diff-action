@@ -62,4 +62,4 @@ $headPath = Resolve-Path "dependency-tree-diff_dependencies-head.txt"
 "file-dependencies-base=$basePath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding UTF8
 "file-dependencies-head=$headPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding UTF8
 
-git switch --detach $currentHead 
+git switch --detach $currentHead
