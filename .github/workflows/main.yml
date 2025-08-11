@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Run dependency diff action
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Test additional arguments
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -149,7 +149,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Execute on ${{ matrix.os }} runner
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
