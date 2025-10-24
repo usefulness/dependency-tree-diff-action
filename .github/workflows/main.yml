@@ -57,7 +57,7 @@ jobs:
           path: ${{ steps.dependency-diff.outputs.file-dependencies-head }}
           if-no-files-found: error
 
-      - uses: peter-evans/find-comment@v3
+      - uses: peter-evans/find-comment@v4
         id: find_comment
         if: github.event_name == 'pull_request'
         with:
@@ -121,7 +121,7 @@ jobs:
           path: ${{ steps.dependency-diff.outputs.file-diff }}
           if-no-files-found: error
 
-      - uses: peter-evans/find-comment@v3
+      - uses: peter-evans/find-comment@v4
         id: find_comment
         if: github.event_name == 'pull_request'
         with:
