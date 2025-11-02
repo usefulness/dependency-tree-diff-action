@@ -25,7 +25,7 @@ jobs:
       - name: Downgrade dependency version to see the diff
         run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.2.0/g' testproject/build.gradle
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
         
       - id: dependency-diff
         if: github.event_name == 'pull_request'
@@ -102,7 +102,7 @@ jobs:
           printf "org.gradle.unsafe.configuration-cache=true" > ~/.gradle/gradle.properties
         shell: bash
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
 
       - id: dependency-diff
         uses: ./
@@ -172,7 +172,7 @@ jobs:
           (Get-Content testproject/build.gradle) -replace 'androidx\.paging:paging-common-ktx:\d+\.\d+\.\d+', 'androidx.paging:paging-common-ktx:3.2.0' | Set-Content testproject/build.gradle
         shell: pwsh
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
 
       - run: ./gradlew dependencies
         working-directory: testproject
