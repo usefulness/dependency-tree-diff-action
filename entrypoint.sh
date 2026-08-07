@@ -1,5 +1,10 @@
 #!/bin/bash -el
 
+if [ -z "$INPUT_BASEREF" ]; then
+  echo "::error::There is no ref to compare against. The action falls back to \`github.base_ref\`, which is only set for pull request events - pass the \`base-ref\` input explicitly for other triggers."
+  exit 1
+fi
+
 cd "$INPUT_BUILD_ROOT_DIR"
 
 if [ "$INPUT_VERSION" == "latest" ]; then
@@ -28,8 +33,17 @@ chmod +x dependency-tree-diff.jar
 current_head=$(git rev-parse HEAD)
 
 ./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" > dependency-tree-diff_dependencies-head.txt
-git fetch --force origin "$INPUT_BASEREF":"$INPUT_BASEREF" --no-tags
-git switch --force "$INPUT_BASEREF"
+
+# Prefer the ref as published by `origin`, but fall back to the local repository,
+# so refs that only exist locally (`HEAD^1`, a not yet pushed commit) keep working.
+if git fetch --force origin "$INPUT_BASEREF" --no-tags; then
+  base_ref="FETCH_HEAD"
+else
+  echo "Could not fetch '$INPUT_BASEREF' from origin, resolving it in the local repository instead"
+  base_ref="$INPUT_BASEREF"
+fi
+
+git switch --force --detach "$base_ref"
 ./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" > dependency-tree-diff_dependencies-base.txt
 java -jar dependency-tree-diff.jar dependency-tree-diff_dependencies-base.txt dependency-tree-diff_dependencies-head.txt > dependency-tree-diff_output.txt
 

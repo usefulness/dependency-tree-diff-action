@@ -13,6 +13,10 @@ inputs:
     description: 'Build root directory'
     required: false
     default: '.'
+  base-ref:
+    description: 'Git ref (branch name, tag or commit sha) the currently checked out revision is compared against. Defaults to `github.base_ref`'
+    required: false
+    default: ''
   lib-version:
     description: 'Dependency diff library version'
     required: true
@@ -36,7 +40,7 @@ outputs:
     description: "Path to a file containing dependencies dump from currently checked out ref"
     value: ${{ steps.diff-generator-unix.outputs.file-dependencies-head || steps.diff-generator-windows.outputs.file-dependencies-head }}
   file-dependencies-base:
-    description: "Path to a file containing dependencies dump from `github.base_ref`"
+    description: "Path to a file containing dependencies dump from the base ref"
     value: ${{ steps.diff-generator-unix.outputs.file-dependencies-base || steps.diff-generator-windows.outputs.file-dependencies-base }}
 branding:
   color: 'red'
@@ -49,7 +53,7 @@ runs:
       env:
         INPUT_PROJECT: ${{ inputs.project }}
         INPUT_CONFIGURATION: ${{ inputs.configuration }}
-        INPUT_BASEREF: ${{ github.base_ref }}
+        INPUT_BASEREF: ${{ inputs.base-ref || github.base_ref }}
         INPUT_BUILD_ROOT_DIR: ${{ inputs.build-root-directory }}
         INPUT_VERSION: ${{ inputs.lib-version }}
         INPUT_ADDITIONAL_GRADLE_ARGUMENTS: ${{ inputs.additional-gradle-arguments }}
@@ -63,7 +67,7 @@ runs:
       env:
         INPUT_PROJECT: ${{ inputs.project }}
         INPUT_CONFIGURATION: ${{ inputs.configuration }}
-        INPUT_BASEREF: ${{ github.base_ref }}
+        INPUT_BASEREF: ${{ inputs.base-ref || github.base_ref }}
         INPUT_BUILD_ROOT_DIR: ${{ inputs.build-root-directory }}
         INPUT_VERSION: ${{ inputs.lib-version }}
         INPUT_ADDITIONAL_GRADLE_ARGUMENTS: ${{ inputs.additional-gradle-arguments }}

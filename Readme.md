@@ -64,6 +64,7 @@ All inputs with their default values:
         configuration: 'releaseRuntimeClasspath'
         project: 'app'
         build-root-directory: .
+        base-ref: ''
         additional-gradle-arguments: ''
         lib-version: 'latest'
 ```
@@ -75,8 +76,32 @@ Dependency diff for root projects can be configured using `project: ''`.
  For Android projects use the one that has `com.android.application` plugin applied.
 - **`build-root-directory`** - Relative path to folder containing gradle wrapper. 
 Example usage: `build-root-directory: library`
+- **`base-ref`** - The ref currently checked out revision is compared against. 
+Accepts anything git can resolve to a commit - a branch name, a tag, a commit sha or an expression like `HEAD^1`. 
+Refs available in the local repository are used as is, everything else is fetched from `origin` first. 
+When left empty (the default) the action falls back to `github.base_ref`, i.e. the branch the pull request targets. 
+See [Stacked pull requests](#stacked-pull-requests).
 - **`additional-gradle-arguments`** - Additional arguments passed to internal Gradle invocation. Example: `"--no-configuration-cache"` or `"--stacktrace"`  
 - **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version. Example: `"1.2.1"`, `"1.1.0"`, `"latest"`
+
+### Stacked pull requests
+
+For [stacked pull requests](https://docs.github.com/en/pull-requests/reference/stacked-pull-requests) `github.base_ref` points at the base of the whole stack (e.g. `main`), 
+while the merge commit CI checks out is built on top of the parent pull request. 
+Both sides of the comparison then contain a different version of `main`, and dependency changes that landed there in the meantime get reported as if they were introduced by the pull request.
+
+Comparing against the first parent of the checked out merge commit puts the same `main` on both sides:
+
+```yml
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+
+    - id: dependency-diff
+      uses: usefulness/dependency-tree-diff-action@v2
+      with:
+        base-ref: HEAD^1
+```
 
 <details><summary></summary>
 <p>

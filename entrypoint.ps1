@@ -11,6 +11,11 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+if ([string]::IsNullOrWhiteSpace($InputBaseRef)) {
+    Write-Host "::error::There is no ref to compare against. The action falls back to ``github.base_ref``, which is only set for pull request events - pass the ``base-ref`` input explicitly for other triggers."
+    exit 1
+}
+
 Set-Location $InputBuildRootDir
 
 $headers = @{
@@ -41,8 +46,23 @@ $currentHead = git rev-parse HEAD
 
 $cmd = "./gradlew.bat $InputAdditionalGradleArguments ${InputProject}:dependencies --configuration $InputConfiguration"
 Invoke-Expression $cmd | Out-File -FilePath "dependency-tree-diff_dependencies-head.txt" -Encoding UTF8
-git fetch --force origin "${InputBaseRef}:${InputBaseRef}" --no-tags
-git switch --force $InputBaseRef
+# Prefer the ref as published by `origin`, but fall back to the local repository,
+# so refs that only exist locally (`HEAD^1`, a not yet pushed commit) keep working.
+try {
+    git fetch --force origin $InputBaseRef --no-tags
+    $fetched = $LASTEXITCODE -eq 0
+} catch {
+    $fetched = $false
+}
+
+if ($fetched) {
+    $baseRef = "FETCH_HEAD"
+} else {
+    Write-Host "Could not fetch '$InputBaseRef' from origin, resolving it in the local repository instead"
+    $baseRef = $InputBaseRef
+}
+
+git switch --force --detach $baseRef
 Invoke-Expression $cmd | Out-File -FilePath "dependency-tree-diff_dependencies-base.txt" -Encoding UTF8
 java -jar dependency-tree-diff.jar dependency-tree-diff_dependencies-base.txt dependency-tree-diff_dependencies-head.txt | Out-File -FilePath "dependency-tree-diff_output.txt" -Encoding UTF8
 

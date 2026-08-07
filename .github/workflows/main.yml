@@ -141,6 +141,61 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
+  test-job-with-custom-base-ref:
+    runs-on: ubuntu-latest
+    name: Test custom base ref
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version-file: .java-version
+
+      - name: Downgrade dependency version to see the diff
+        run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.2.0/g' testproject/build.gradle
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      # Ref resolved in the local repository only
+      - id: dependency-diff-local-ref
+        uses: ./
+        with:
+          configuration: runtimeClasspath
+          build-root-directory: testproject
+          project: ""
+          base-ref: HEAD^1
+          debug: true
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: file-diff-test-base-ref-local
+          path: ${{ steps.dependency-diff-local-ref.outputs.file-diff }}
+          if-no-files-found: error
+
+      # The action restores the checked out commit, which reverts the downgrade above
+      - name: Downgrade dependency version again to see the diff
+        run: sed -i -E 's/androidx.paging:paging-common-ktx:[[:digit:]]+.[[:digit:]]+.[[:digit:]]+/androidx.paging:paging-common-ktx:3.2.0/g' testproject/build.gradle
+
+      # Sha fetched from origin
+      - id: dependency-diff-sha
+        uses: ./
+        with:
+          configuration: runtimeClasspath
+          build-root-directory: testproject
+          project: ""
+          base-ref: ${{ github.event.pull_request.base.sha }}
+          debug: true
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: file-diff-test-base-ref-sha
+          path: ${{ steps.dependency-diff-sha.outputs.file-diff }}
+          if-no-files-found: error
+
   test-on-different-os:
     strategy:
       fail-fast: false
