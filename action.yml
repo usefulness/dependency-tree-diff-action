@@ -21,6 +21,10 @@ inputs:
     description: 'Dependency diff library version'
     required: true
     default: 'latest'
+  lib-checksum:
+    description: 'Expected SHA-256 checksum of the downloaded `dependency-tree-diff.jar`. When set, the action fails if the downloaded file does not match. Only makes sense when `lib-version` is pinned'
+    required: false
+    default: ''
   additional-gradle-arguments:
     description: 'Additional arguments passed to gradle commands'
     required: false
@@ -56,6 +60,7 @@ runs:
         INPUT_BASEREF: ${{ inputs.base-ref || github.base_ref }}
         INPUT_BUILD_ROOT_DIR: ${{ inputs.build-root-directory }}
         INPUT_VERSION: ${{ inputs.lib-version }}
+        INPUT_CHECKSUM: ${{ inputs.lib-checksum }}
         INPUT_ADDITIONAL_GRADLE_ARGUMENTS: ${{ inputs.additional-gradle-arguments }}
         INPUT_DEBUG: ${{ inputs.debug }}
         GITHUB_TOKEN: ${{ github.token }}
@@ -70,6 +75,7 @@ runs:
         INPUT_BASEREF: ${{ inputs.base-ref || github.base_ref }}
         INPUT_BUILD_ROOT_DIR: ${{ inputs.build-root-directory }}
         INPUT_VERSION: ${{ inputs.lib-version }}
+        INPUT_CHECKSUM: ${{ inputs.lib-checksum }}
         INPUT_ADDITIONAL_GRADLE_ARGUMENTS: ${{ inputs.additional-gradle-arguments }}
         INPUT_DEBUG: ${{ inputs.debug }}
         GITHUB_TOKEN: ${{ github.token }}

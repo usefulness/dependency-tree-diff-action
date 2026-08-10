@@ -196,6 +196,53 @@ jobs:
           path: ${{ steps.dependency-diff-sha.outputs.file-diff }}
           if-no-files-found: error
 
+  test-job-with-checksum:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-latest, ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    name: Test checksum verification on ${{ matrix.os }}
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version-file: .java-version
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - id: dependency-diff-invalid-checksum
+        uses: ./
+        continue-on-error: true
+        with:
+          configuration: runtimeClasspath
+          build-root-directory: testproject
+          project: ""
+          lib-version: "1.2.1"
+          lib-checksum: "0000000000000000000000000000000000000000000000000000000000000000"
+
+      - name: Assert invalid checksum fails the action
+        if: steps.dependency-diff-invalid-checksum.outcome != 'failure'
+        run: |
+          echo "::error::Expected the action to fail on checksum mismatch, but it succeeded"
+          exit 1
+        shell: bash
+
+      - id: dependency-diff
+        uses: ./
+        with:
+          configuration: runtimeClasspath
+          build-root-directory: testproject
+          project: ""
+          lib-version: "1.2.1"
+          lib-checksum: "f6c84d5ce8beb3277103fb8235071dd8bc69a7cde75239f636a7c8293ff0c865"
+          debug: true
+
   test-on-different-os:
     strategy:
       fail-fast: false
