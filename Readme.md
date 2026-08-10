@@ -67,6 +67,7 @@ All inputs with their default values:
         base-ref: ''
         additional-gradle-arguments: ''
         lib-version: 'latest'
+        lib-checksum: ''
 ```
 
 - **`configuration`** - Selected Gradle configuration, passed to `./gradlew dependencies --configuration xxx`.
@@ -83,6 +84,10 @@ When left empty (the default) the action falls back to `github.base_ref`, i.e. t
 See [Stacked pull requests](#stacked-pull-requests).
 - **`additional-gradle-arguments`** - Additional arguments passed to internal Gradle invocation. Example: `"--no-configuration-cache"` or `"--stacktrace"`  
 - **`lib-version`** - Overrides [dependency-tree-diff](https://github.com/JakeWharton/dependency-tree-diff) dependency version. Example: `"1.2.1"`, `"1.1.0"`, `"latest"`
+- **`lib-checksum`** - Expected SHA-256 checksum of the downloaded `dependency-tree-diff.jar`. 
+When set, the action fails if the downloaded file doesn't match. 
+Only makes sense in combination with a pinned `lib-version`. 
+Example: `lib-version: '1.2.1'` + `lib-checksum: 'f6c84d5ce8beb3277103fb8235071dd8bc69a7cde75239f636a7c8293ff0c865'`
 
 ### Stacked pull requests
 

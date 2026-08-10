@@ -17,6 +17,15 @@ else
   curl -H "Authorization: Bearer $GITHUB_TOKEN" -L -s -o dependency-tree-diff.jar "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$INPUT_VERSION/dependency-tree-diff.jar"
 fi
 
+if [ -n "$INPUT_CHECKSUM" ]; then
+  expected_checksum=$(echo "$INPUT_CHECKSUM" | tr '[:upper:]' '[:lower:]')
+  actual_checksum=$(shasum -a 256 dependency-tree-diff.jar | cut -d ' ' -f 1)
+  if [ "$actual_checksum" != "$expected_checksum" ]; then
+    echo "::error::Checksum verification of dependency-tree-diff.jar failed. Expected: $expected_checksum, actual: $actual_checksum"
+    exit 1
+  fi
+fi
+
 if [ "$INPUT_PROJECT" == ":" ]; then
   INPUT_PROJECT=""
 fi

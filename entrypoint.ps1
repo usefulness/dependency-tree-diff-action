@@ -4,6 +4,7 @@ param(
     [string]$InputBaseRef = $env:INPUT_BASEREF,
     [string]$InputBuildRootDir = $env:INPUT_BUILD_ROOT_DIR,
     [string]$InputVersion = $env:INPUT_VERSION,
+    [string]$InputChecksum = $env:INPUT_CHECKSUM,
     [string]$InputAdditionalGradleArguments = $env:INPUT_ADDITIONAL_GRADLE_ARGUMENTS,
     [string]$InputDebug = $env:INPUT_DEBUG,
     [string]$GithubToken = $env:GITHUB_TOKEN
@@ -29,6 +30,15 @@ if ($InputVersion -eq "latest") {
 } else {
     $downloadUrl = "https://github.com/JakeWharton/dependency-tree-diff/releases/download/$InputVersion/dependency-tree-diff.jar"
     Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile "dependency-tree-diff.jar"
+}
+
+if (-not [string]::IsNullOrWhiteSpace($InputChecksum)) {
+    $expectedChecksum = $InputChecksum.Trim()
+    $actualChecksum = (Get-FileHash -Path "dependency-tree-diff.jar" -Algorithm SHA256).Hash
+    if ($actualChecksum -ne $expectedChecksum) {
+        Write-Host "::error::Checksum verification of dependency-tree-diff.jar failed. Expected: $expectedChecksum, actual: $actualChecksum"
+        exit 1
+    }
 }
 
 if ($InputProject -eq ":") {
