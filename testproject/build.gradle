@@ -1,5 +1,5 @@
 plugins {
-    id("com.starter.library.kotlin") version "0.100.0"
+    id("com.starter.library.kotlin") version "0.101.0"
 }
 
 kotlin {
