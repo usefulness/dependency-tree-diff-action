@@ -53,6 +53,7 @@ else
 fi
 
 git switch --force --detach "$base_ref"
+git submodule update --force --recursive
 ./gradlew $INPUT_ADDITIONAL_GRADLE_ARGUMENTS "$INPUT_PROJECT":dependencies --configuration "$INPUT_CONFIGURATION" > dependency-tree-diff_dependencies-base.txt
 java -jar dependency-tree-diff.jar dependency-tree-diff_dependencies-base.txt dependency-tree-diff_dependencies-head.txt > dependency-tree-diff_output.txt
 
@@ -73,3 +74,4 @@ echo "file-dependencies-base=$(realpath dependency-tree-diff_dependencies-base.t
 echo "file-dependencies-head=$(realpath dependency-tree-diff_dependencies-head.txt)" >> $GITHUB_OUTPUT
 
 git switch --detach "$current_head"
+git submodule update --recursive

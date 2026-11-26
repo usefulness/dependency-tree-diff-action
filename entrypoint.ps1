@@ -73,6 +73,10 @@ if ($fetched) {
 }
 
 git switch --force --detach $baseRef
+git submodule update --force --recursive
+if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+}
 Invoke-Expression $cmd | Out-File -FilePath "dependency-tree-diff_dependencies-base.txt" -Encoding UTF8
 java -jar dependency-tree-diff.jar dependency-tree-diff_dependencies-base.txt dependency-tree-diff_dependencies-head.txt | Out-File -FilePath "dependency-tree-diff_output.txt" -Encoding UTF8
 
@@ -98,3 +102,7 @@ $headPath = Resolve-Path "dependency-tree-diff_dependencies-head.txt"
 "file-dependencies-head=$headPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding UTF8
 
 git switch --detach $currentHead
+git submodule update --recursive
+if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+}
