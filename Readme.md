@@ -108,6 +108,13 @@ Comparing against the first parent of the checked out merge commit puts the same
         base-ref: HEAD^1
 ```
 
+### Git submodules
+
+Submodules the workflow checked out (`actions/checkout` with `submodules: true` or `recursive`) are switched to the commits the base ref records before the base build, and back afterwards. 
+Dependency changes made inside a submodule, e.g. an included build, then show up in the diff, and the base build doesn't pick up submodule changes it isn't compatible with. 
+Submodule commits missing from a shallow clone are fetched from the submodule's remote, using the credentials `actions/checkout` persisted. 
+Submodules the workflow didn't check out are left alone.
+
 <details><summary></summary>
 <p>
 

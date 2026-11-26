@@ -243,6 +243,54 @@ jobs:
           lib-checksum: "f6c84d5ce8beb3277103fb8235071dd8bc69a7cde75239f636a7c8293ff0c865"
           debug: true
 
+  test-job-with-submodules:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-latest, ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    name: Test submodules on ${{ matrix.os }}
+    env:
+      GIT_CONFIG_COUNT: 1
+      GIT_CONFIG_KEY_0: protocol.file.allow
+      GIT_CONFIG_VALUE_0: always
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version-file: .java-version
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Create a project whose head commit bumps a submodule
+        run: bash .github/scripts/create-project-with-submodule.sh testproject "$RUNNER_TEMP/submodule-test"
+        shell: bash
+
+      - id: dependency-diff
+        uses: ./
+        with:
+          configuration: runtimeClasspath
+          build-root-directory: ${{ runner.temp }}/submodule-test/superproject
+          project: ""
+          base-ref: main
+          lib-version: "1.2.1"
+          debug: true
+
+      - name: Assert the diff includes the submodule's changes and the head's submodule is restored
+        env:
+          DIFF_FILE: ${{ steps.dependency-diff.outputs.file-diff }}
+          PROJECT_DIR: ${{ runner.temp }}/submodule-test/superproject
+        run: |
+          cat "$DIFF_FILE"
+          grep -E '^-.*androidx\.paging:paging-common-ktx:3\.2\.0' "$DIFF_FILE"
+          grep -E '^\+.*androidx\.paging:paging-common-ktx:3\.3\.0' "$DIFF_FILE"
+          grep -E '^\+.*com\.squareup\.okio:okio:3\.9\.0' "$DIFF_FILE"
+          git -C "$PROJECT_DIR" submodule status
+          test -z "$(git -C "$PROJECT_DIR" submodule status | grep -v '^ ')"
+        shell: bash
+
   test-on-different-os:
     strategy:
       fail-fast: false
